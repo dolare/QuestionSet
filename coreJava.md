@@ -25,6 +25,42 @@ click [here](http://howtodoinjava.com/design-patterns/creational/singleton-desig
 ##2. Difference between checked and unchecked exception
 click [here](http://beginnersbook.com/2013/04/java-checked-unchecked-exceptions-with-examples/) to see the full version
 
+*how to write a customize exception?*
+
+        package com.javacodegeeks.examples.exception;
+        
+        public class CustomException extends Exception
+        {
+        
+            private static final long serialVersionUID = 1997753363232807009L;
+        
+        		public CustomException()
+        		{
+        		}
+        
+        		public CustomException(String message)
+        		{
+        			super(message);
+        		}
+        
+        		public CustomException(Throwable cause)
+        		{
+        			super(cause);
+        		}
+        
+        		public CustomException(String message, Throwable cause)
+        		{
+        			super(message, cause);
+        		}
+        
+        		public CustomException(String message, Throwable cause, 
+                                                   boolean enableSuppression, boolean writableStackTrace)
+        		{
+        			super(message, cause, enableSuppression, writableStackTrace);
+        		}
+        
+        }
+
 ##3. Difference between Comparable and Comparator
 
 1. Comparator in Java is defined in java.util package while Comparable interface in Java is defined in java.lang package, which very much says that Comparator should be used as an utility to sort objects which Comparable should be provided by default.
@@ -84,9 +120,23 @@ Synchronization in java is achieved using synchronized keyword. You can use sync
 
 [useful link here](http://howtodoinjava.com/core-java/multi-threading/thread-synchronization-object-level-locking-and-class-level-locking/)
 
+*Difference between synchronized block and synchronized method*
+
+There two synchronization syntax in Java Language. The practical differences are in controlling scope and the monitor. With a synchronized method, the lock is obtained for the duration of the entire method. With synchronized blocks you can specify exactly when the lock is needed.
+
+The synchronized block can only be executed after a thread has acquired the lock for the object or class referenced, for example the "locker1" or "locker2" in above code, in the synchronized statement.
+
+The above code shows that synchronized block can be holding different object monitors. Maybe it's necessary to protect doSomething1() method and doSomething2() method from multiple threads, but it's fine if one thread is in the doSomething1() method and another is in the doSomething2() method. But the synchronized method can not do it.
+
+A synchronized method synchronizes on the object instance or the class. A thread only executes a synchronized method after it has acquired the lock for the method's object or class.
+
+static synchronized methods synchronize on the class object. If one thread is executing a static synchronized method, all other threads trying to execute any static synchronized methods, in the same class, will block.
+non-static synchronized methods synchronize on "this" (the instance object). If one thread is executing a synchronized method, all other threads trying to execute any synchronized methods, in the same class, will block.
+These are very public monitors, meaning some other thread could synchronize on them for the wrong reason, leading to slowdowns or deadlocks.
+
 ##8. what is class loader in java, and how it works?
 
-Java class loaders are used to load classes at runtime. ClassLoader in Java works on three principle: delegation, visibility and uniqueness
+Java class loaders are used to load classes at runtime. ClassLoader in Java works on three principle: delegation, visibility and uniqueness.
 
 Java code is compiled into class file by javac compiler and JVM executes Java program, by executing byte codes written in class file. ClassLoader is responsible for loading class files from file system, network or any other source. There are three default class loader used in Java, Bootstrap , Extension and System or Application class loader. 
 
@@ -161,7 +211,150 @@ Generic types are instantiated to form parameterized types by providing actual t
 
 [go to this link to see detail](http://javaconceptoftheday.com/hashset-vs-linkedhashset-vs-treeset-in-java/)
 
-##15. what is serialization?
+##15. Explain serialization?
+
+Object Serialization in Java is a process used to convert Object into a binary format which can be persisted into disk or sent over network to any other running Java virtual machine; the reverse process of creating object from binary stream is called deserialization in Java.
+
+
+*how to make a Java class serializable?*
+Making a class Serializable in Java is very easy, Your Java class just needs to implements java.io.Serializable interface and JVM will take care of serializing object in default format
+
+*What is the difference between Serializable and Externalizable interface in Java?*
+Externalizable provides us writeExternal() and readExternal() method which gives us flexibility to control java serialization mechanism instead of relying on Java's default serialization. Correct implementation of Externalizable interface can improve performance of application drastically.
+
+*How many methods Serializable has? If no method then what is the purpose of Serializable interface?*
+Serializable interface exists in java.io package and forms core of java serialization mechanism. It doesn't have any method and also called Marker Interface in Java. When your class implements java.io.Serializable interface it becomes Serializable in Java and gives compiler an indication that use Java Serialization mechanism to serialize this object.
+
+*What is serialVersionUID? What would happen if you don't define this?*
+
+SerialVersionUID is an ID which is stamped on object when it get serialized usually hashcode of object, you can use tool serialver to see serialVersionUID of a serialized object . SerialVersionUID is used for version control of object. you can specify serialVersionUID in your class file also. Consequence of not specifying serialVersionUID is that when you add or modify any field in class then already serialized class will not be able to recover because serialVersionUID generated for new class and for old serialized object will be different. Java serialization process relies on correct serialVersionUID for recovering state of serialized object and throws java.io.InvalidClassException in case of serialVersionUID mismatch, to learn more about serialversionuid see this article.
+
+*While serializing you want some of the members not to serialize? How do you achieve it?*
+
+Another frequently asked Serialization interview question. This is sometime also asked as what is the use of transient variable, does transient and static variable gets serialized or not etc. so if you don't want any field to be part of object's state then declare it either static or transient based on your need and it will not be included during Java serialization process.
+
+Read more: http://javarevisited.blogspot.com/2011/04/top-10-java-serialization-interview.html#ixzz48wNcHpIH
+
+
+##16. what is autoboxing?please give an example?
+
+When Java automatically converts a primitive type like int into corresponding wrapper class object e.g. Integer than its called autoboxing  because primitive is boxed into wrapper class while in opposite case is called unboxing, where an Integer object is converted into primitive int. All primitive types e.g. byte, short, char, int, long, float, double and boolean has corresponding wrapper class e.g. Byte, Short, Integer, Character etc and participate in autoboxing and unboxing. Since the whole process happens automatically without writing any code for conversion its called autoboxing and auto-unboxing
+
+![example](https://4.bp.blogspot.com/-go-bemNoIPc/VXhMH26751I/AAAAAAAAC-w/ZutSedwa1UM/s640/Autoboxing%2Band%2BUnboxing%2Bin%2BJava%2B2.jpg)
+
+Read more: http://javarevisited.blogspot.com/2012/07/auto-boxing-and-unboxing-in-java-be.html#ixzz48wPG3cvP
+
+##17. what is reflection and how to use it?
+
+Java Reflection is a process of examining or modifying the run time behavior of a class at run time.
+
+The java.lang.Class class provides many methods that can be used to get metadata, examine and change the run time behavior of a class.
+
+Java Reflection is quite powerful and can be very useful. Java Reflection makes it possible to inspect classes, interfaces, fields and methods at runtime, without knowing the names of the classes, methods etc. at compile time. It is also possible to instantiate new objects, invoke methods and get/set field values using reflection.
+
+examle:
+
+    Method[] methods = MyObject.class.getMethods();
+     for(Method method : methods){
+        System.out.println("method = " + method.getName());
+    }
+This example obtains the Class object from the class called MyObject. Using the class object the example gets a list of the methods in that class, iterates the methods and print out their names.
+
+##18. explain thread life cycle?
+
+A thread can be in one of the five states. According to sun, there is only 4 states in thread life cycle in java new, runnable, non-runnable and terminated. There is no running state.
+
+![life cycle image](https://s-media-cache-ak0.pinimg.com/564x/8c/62/46/8c6246c6585ecd0a0ad11a9d89295e68.jpg)
+
+1. New
+
+The thread is in new state if you create an instance of Thread class but before the invocation of start() method.
+
+2. Runnable
+
+The thread is in runnable state after invocation of start() method, but the thread scheduler has not selected it to be the running thread.
+
+3. Running
+
+The thread is in running state if the thread scheduler has selected it.
+
+4. Non-Runnable (Blocked)
+
+This is the state when the thread is still alive, but is currently not eligible to run.
+
+5. Terminated
+
+A thread is in terminated or dead state when its run() method exits.
+
+##19. List methods in class Object
+
+1. protected Object clone()
+2. boolean equals(Object obj)
+3. protected void finalize()
+4. Class<?> getClass()
+5. int hashCode()
+6. void notify()
+7. void notifyAll()
+8. String toString()
+9. void wait()
+
+
+##20. What is Collection hierachy in Java?
+![image](https://s-media-cache-ak0.pinimg.com/564x/6b/2f/c1/6b2fc16a7a0e4979e6970596b0d74ab0.jpg)
+
+![image](https://s-media-cache-ak0.pinimg.com/564x/c1/50/df/c150df332d3dc7cfe66d33235d1653ba.jpg)
+
+![image](https://s-media-cache-ak0.pinimg.com/564x/68/c8/a4/68c8a479d489c0b65f3e3586bbf8298f.jpg)
+
+different between collection and collections?
+
+First of all, "Collection" and "Collections" are two different concepts. As you will see from the hierarchy diagram below, "Collection" is a root interface in the Collection hierarchy but "Collections" is a class which provide static methods to manipulate on some Collection types.
+
+
+##21 New features in Java 1.7 and Java 1.8?
+
+1.8:Language changes:
+
+lambda expressions (JSR 335, includes method handles)
+continuation of Project Coin (small language improvements)
+annotations on Java types
+Library changes:
+
+Improved Date and Time API
+
+1.7:Language changes:
+
+Project Coin (small changes)
+switch on Strings
+try-with-resources
+diamond operator
+Library changes:
+
+new abstracted file-system API (NIO.2) (with support for virtual filesystems)
+improved concurrency libraries
+elliptic curve encryption
+more incremental upgrades
+Platform changes:
+
+support for dynamic languages
+
+##22. what is the difference between interface and abstract class?
+
+|interface|abstract class|
+|---------|---------------|
+|Interface can have only abstract methods.|Abstract class can have abstract and non-abstract methods.|
+| Interface supports multiple inheritance.|Abstract class doesn't support multiple inheritance.|
+|Interface has only static and final variables.|Abstract class can have final, non-final, static and non-static variables.|
+|Interface can't have static methods, main method or constructor.|Abstract class can have static methods, main method and constructor.|
+|Interface can't provide the implementation of abstract class.|Abstract class can provide the implementation of interface.|
+|The interface keyword is used to declare interface.| The abstract keyword is used to declare abstract class.|
+
+##23
+
+
+
+
+
 
 
 
