@@ -138,6 +138,7 @@ String, Integer, Boolean, Character, Byte, Short, Long, Float, Double, BigDecima
 ##11. Difference between HashMap and Hashtable
 
 |---|HashMap|HashTable|
+|----|------|--------|
 |Synchronized|no|yes|
 |Thread-safe|No|Yes|
 |null keys and null values|one null key,any null values|not permit null keys and values|
